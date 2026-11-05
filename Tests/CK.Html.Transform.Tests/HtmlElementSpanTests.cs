@@ -22,6 +22,34 @@ public class HtmlElementSpanTests
         s.Span.ShouldBe( new TokenSpan( idxStart, idxStart + 2 ) );
     }
 
+    // A closing tag after text is an ending tag: the text doesn't take its '<'.
+    [TestCase( "<d>x</d>", 3, 0 )]
+    [TestCase( "A<d>x</d>B", 5, 1 )]
+    [TestCase( "<d>Hello world</d>", 3, 0 )]
+    public void single_element_with_text_tests( string text, int tokenCount, int idxStart )
+    {
+        var sourceCode = new HtmlAnalyzer().ParseOrThrow( text );
+        sourceCode.Tokens.Count.ShouldBe( tokenCount );
+        sourceCode.Tokens[idxStart + 1].TokenType.IsHtmlText().ShouldBeTrue();
+        sourceCode.Tokens[idxStart + 1].Text.ToString().ShouldNotContain( '<' );
+        sourceCode.Tokens[idxStart + 2].TokenType.IsHtmlEndingTag().ShouldBeTrue();
+        sourceCode.Tokens[idxStart + 2].ToString().ShouldBe( "</d>" );
+        var s = sourceCode.Spans.Single();
+        s.Children.ShouldBeEmpty();
+        s.Span.ShouldBe( new TokenSpan( idxStart, idxStart + 3 ) );
+    }
+
+    [Test]
+    public void nested_elements_with_text()
+    {
+        var sourceCode = new HtmlAnalyzer().ParseOrThrow( "<p>Say <b>Hello</b>!</p>" );
+        sourceCode.Tokens.Select( t => t.ToString() ).ShouldBe( ["<p>", "Say ", "<b>", "Hello", "</b>", "!", "</p>"] );
+        var p = sourceCode.Spans.Single();
+        p.Span.ShouldBe( new TokenSpan( 0, 7 ) );
+        var b = p.Children.Single();
+        b.Span.ShouldBe( new TokenSpan( 2, 5 ) );
+    }
+
     [TestCase( "<area >", 1 )]
     [TestCase( "A<base       > ", 3 )]
     [TestCase( " <br> ", 3 )]

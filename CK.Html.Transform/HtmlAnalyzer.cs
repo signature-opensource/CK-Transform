@@ -96,8 +96,9 @@ public sealed partial class HtmlAnalyzer : TargetLanguageAnalyzer
             if( iS >= head.Length - 1 ) return new LowLevelToken( (TokenType)HtmlTokenType.Text, head.Length );
             c = head[++iS];
             if( !char.IsAsciiLetter( c ) ) goto text;
-            // If there is text before the </[A-Za-z], emit it. The tag will be processed next time.
-            if( iS > 2 ) return new LowLevelToken( (TokenType)HtmlTokenType.Text, iS - 1 );
+            // If there is text before the </[A-Za-z], emit it (iS is on the letter, the '<' is at iS - 2).
+            // The tag will be processed next time.
+            if( iS > 2 ) return new LowLevelToken( (TokenType)HtmlTokenType.Text, iS - 2 );
         }
         // In a tag name: <[a-zA-Z] or a closing </[a-zA-Z].
         // Extremely permissive here.
