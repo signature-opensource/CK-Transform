@@ -278,4 +278,17 @@ public class HtmlTokenTests
         sourceCode.Tokens[0].LeadingTrivias[0].Content.ToString().ShouldBe( "<!-- comment --!>" );
         sourceCode.Tokens[0].LeadingTrivias[0].TokenType.IsError().ShouldBeFalse();
     }
+
+    // Like a browser: the comment ends at the first of "-->" and "--!>". The <b> element is not part of a
+    // comment that would end at the last "-->".
+    [Test]
+    public void incorrectly_closed_comment_ends_before_a_later_regular_end()
+    {
+        var a = new HtmlAnalyzer();
+        var sourceCode = a.ParseOrThrow( "<!-- note --!><b>Hello</b><!-- other -->" );
+        sourceCode.Tokens[0].ToString().ShouldBe( "<b>" );
+        sourceCode.Tokens[0].LeadingTrivias.Length.ShouldBe( 1 );
+        sourceCode.Tokens[0].LeadingTrivias[0].Content.ToString().ShouldBe( "<!-- note --!>" );
+        sourceCode.Tokens[0].LeadingTrivias[0].TokenType.IsError().ShouldBeFalse();
+    }
 }

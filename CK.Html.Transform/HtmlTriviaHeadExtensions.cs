@@ -12,7 +12,7 @@ public static class HtmlTriviaHeadExtensions
     /// <summary>
     /// Xml comment is a block comment that starts with "&lt;!--" and ends with "--&gt;".
     /// By default, as per https://html.spec.whatwg.org/multipage/parsing.html#parse-errors incorrectly-closed-comment,
-    /// we also allow that the end with "--!&gt;".
+    /// we also allow that the end with "--!&gt;": like a browser, the comment ends at the first of "--&gt;" and "--!&gt;".
     /// </summary>
     /// <param name="c">This head.</param>
     /// <param name="strict">True to not accept "--!&gt;" comment end.</param>
@@ -21,19 +21,19 @@ public static class HtmlTriviaHeadExtensions
         if( c.Head.StartsWith( "<!--" ) )
         {
             int i = c.Head.IndexOf( "-->" );
+            if( !strict )
+            {
+                int iBang = c.Head.IndexOf( "--!>" );
+                if( iBang >= 0 && (i < 0 || iBang < i) )
+                {
+                    c.Accept( TokenTypeExtensions.GetTriviaBlockCommentType( 4, 4 ), iBang + 4 );
+                    return;
+                }
+            }
             if( i >= 0 )
             {
                 c.Accept( TokenTypeExtensions.GetTriviaBlockCommentType( 4, 3 ), i + 3 );
                 return;
-            }
-            if( !strict )
-            {
-                i = c.Head.IndexOf( "--!>" );
-                if( i >= 0 )
-                {
-                    c.Accept( TokenTypeExtensions.GetTriviaBlockCommentType( 4, 4 ), i + 4 );
-                    return;
-                }
             }
             c.EndOfInput( TokenTypeExtensions.GetTriviaBlockCommentType( 4, 3 ) );
         }
