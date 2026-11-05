@@ -1,2 +1,12 @@
 <Solution>
+  <Folder Name="/Tests/">
+    <Project Path="Tests/CK.Html.Transform.Tests/CK.Html.Transform.Tests.csproj" />
+    <Project Path="Tests/CK.Less.Transform.Tests/CK.Less.Transform.Tests.csproj" />
+    <Project Path="Tests/CK.Transform.Core.Tests/CK.Transform.Core.Tests.csproj" />
+    <Project Path="Tests/CK.TypeScript.Transform.Tests/CK.TypeScript.Transform.Tests.csproj" />
+  </Folder>
+  <Project Path="CK.Html.Transform/CK.Html.Transform.csproj" />
+  <Project Path="CK.Less.Transform/CK.Less.Transform.csproj" />
+  <Project Path="CK.Transform.Core/CK.Transform.Core.csproj" />
+  <Project Path="CK.TypeScript.Transform/CK.TypeScript.Transform.csproj" />
 </Solution>
