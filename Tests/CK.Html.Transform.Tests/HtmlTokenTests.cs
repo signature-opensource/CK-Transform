@@ -265,4 +265,17 @@ public class HtmlTokenTests
             sourceCode.Tokens[1].TrailingTrivias.Length.ShouldBe( 0 );
         }
     }
+
+    [Test]
+    public void incorrectly_closed_comment()
+    {
+        var a = new HtmlAnalyzer();
+        var sourceCode = a.ParseOrThrow( "<!-- comment --!><div>" );
+        sourceCode.Tokens.Count.ShouldBe( 1 );
+        sourceCode.Tokens[0].TokenType.IsHtmlStartingEmptyElement().ShouldBeTrue();
+        sourceCode.Tokens[0].ToString().ShouldBe( "<div>" );
+        sourceCode.Tokens[0].LeadingTrivias.Length.ShouldBe( 1 );
+        sourceCode.Tokens[0].LeadingTrivias[0].Content.ToString().ShouldBe( "<!-- comment --!>" );
+        sourceCode.Tokens[0].LeadingTrivias[0].TokenType.IsError().ShouldBeFalse();
+    }
 }

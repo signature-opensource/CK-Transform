@@ -29,9 +29,9 @@ public static class TriviaHeadExtensions
             if( !strict )
             {
                 i = c.Head.IndexOf( "--!>" );
-                if( i > 0 )
+                if( i >= 0 )
                 {
-                    c.Accept( TokenTypeExtensions.GetTriviaBlockCommentType( 4, 4 ), i + 3 );
+                    c.Accept( TokenTypeExtensions.GetTriviaBlockCommentType( 4, 4 ), i + 4 );
                     return;
                 }
             }

@@ -4,7 +4,7 @@ using System;
 namespace CK.TypeScript.Transform;
 
 /// <summary>
-/// TypeScript language anlayzer.
+/// TypeScript language analyzer.
 /// </summary>
 public sealed partial class TypeScriptAnalyzer : TargetLanguageAnalyzer
 {
@@ -114,7 +114,7 @@ public sealed partial class TypeScriptAnalyzer : TargetLanguageAnalyzer
                                 _ => EnclosingTokenType.None
                             } ),
             "class" => new SpanTypeOperator( "{class}", typeof( ClassDefinition ) ),
-            "^class" => new CoveringSpanTypeOperator( "{class}", typeof( ClassDefinition ) ),
+            "^class" => new CoveringSpanTypeOperator( "{^class}", typeof( ClassDefinition ) ),
             "import" => new SpanTypeOperator( "{import}", typeof( ImportStatement ) ),
             _ => $$"""
                         Invalid span type '{spanSpec}'.
