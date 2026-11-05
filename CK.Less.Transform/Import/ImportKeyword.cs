@@ -53,8 +53,17 @@ public enum ImportKeyword
     Optional = 1 << 6
 }
 
+/// <summary>
+/// Extension methods of <see cref="ImportKeyword"/> that handle its mutually exclusive keywords.
+/// </summary>
 public static class ImportKeywordExtensions
 {
+    /// <summary>
+    /// Removes the mutually exclusive keywords: <see cref="ImportKeyword.Multiple"/> wins over <see cref="ImportKeyword.Once"/>
+    /// and <see cref="ImportKeyword.Less"/> wins over <see cref="ImportKeyword.Css"/>.
+    /// </summary>
+    /// <param name="k">This keywords.</param>
+    /// <returns>The normalized keywords.</returns>
     public static ImportKeyword Normalize( this ImportKeyword k )
     {
         // Multiple has the priority over the 'once' default.
@@ -68,6 +77,15 @@ public static class ImportKeywordExtensions
         return k;
     }
 
+    /// <summary>
+    /// Includes and excludes keywords. An included <see cref="ImportKeyword.Css"/> excludes <see cref="ImportKeyword.Less"/>
+    /// and an included <see cref="ImportKeyword.Once"/> excludes <see cref="ImportKeyword.Multiple"/>: the keywords to
+    /// include win over the existing ones. The result is <see cref="Normalize(ImportKeyword)">normalized</see>.
+    /// </summary>
+    /// <param name="k">This keywords.</param>
+    /// <param name="include">The keywords to include.</param>
+    /// <param name="exclude">The keywords to exclude.</param>
+    /// <returns>The resulting keywords.</returns>
     public static ImportKeyword Apply( this ImportKeyword k, ImportKeyword include, ImportKeyword exclude )
     {
         // Accounting the priorities.

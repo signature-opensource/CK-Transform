@@ -11,8 +11,8 @@ namespace CK.Html.Transform;
 /// <list type="bullet">
 ///     <item><term>Text</term>
 ///     <description>
-///     Whitespaces are not handled in Trivias. Trivias are only <see cref="TriviaHeadExtensions.AcceptXmlComment(ref TriviaHead, bool)"/>
-///     and <see cref="TriviaHeadExtensions.AcceptXmlCDATA(ref TriviaHead)"/>.
+///     Whitespaces are not handled in Trivias. Trivias are only <see cref="HtmlTriviaHeadExtensions.AcceptXmlComment(ref TriviaHead, bool)"/>
+///     and <see cref="HtmlTriviaHeadExtensions.AcceptXmlCDATA(ref TriviaHead)"/>.
 ///     Whitespaces appear in <see cref="TokenTypeExtensions.IsHtmlText(TokenType)"/> tokens.
 ///     These tokens are not unified: multiple Text tokens can appear consecutively because of commants or CDATA trivias and invalid syntax
 ///     (<c>&lt;div &lt;a &lt;br&gt;</c> is analyzed as "&lt;div " and "&lt;a " texts).
@@ -45,8 +45,8 @@ public sealed partial class HtmlAnalyzer : TargetLanguageAnalyzer
 
     /// <summary>
     /// When <see cref="Analyzer.HandleWhiteSpaceTrivias"/> is false, this
-    /// calls <see cref="TriviaHeadExtensions.AcceptXmlComment(ref TriviaHead, bool)"/>
-    /// and <see cref="TriviaHeadExtensions.AcceptXmlCDATA(ref TriviaHead)"/>.
+    /// calls <see cref="HtmlTriviaHeadExtensions.AcceptXmlComment(ref TriviaHead, bool)"/>
+    /// and <see cref="HtmlTriviaHeadExtensions.AcceptXmlCDATA(ref TriviaHead)"/>.
     /// </summary>
     /// <param name="c"></param>
     protected override void ParseTrivia( ref TriviaHead c )

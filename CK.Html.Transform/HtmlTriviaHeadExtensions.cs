@@ -7,7 +7,7 @@ namespace CK.Transform.Core;
 /// These extension methods are <see cref="TriviaParser"/> and can easily be combined
 /// into composite <see cref="TriviaParser"/>.
 /// </summary>
-public static class TriviaHeadExtensions
+public static class HtmlTriviaHeadExtensions
 {
     /// <summary>
     /// Xml comment is a block comment that starts with "&lt;!--" and ends with "--&gt;".
