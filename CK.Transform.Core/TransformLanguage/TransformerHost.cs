@@ -188,7 +188,7 @@ public sealed partial class TransformerHost
             extension = fileName.Slice( m.Current.Index );
             var l = FindLanguage( extension, withFileExtensions: true );
             if( l != null ) return l;
-            if( extension[^2] == '.' && extension[^1] == 't' )
+            if( extension[^2] == '.' && extension[^1] is 't' or 'T' )
             {
                 extension = extension[^2..];
                 return _rootLanguage;
@@ -198,7 +198,7 @@ public sealed partial class TransformerHost
         return null;
     }
 
-    [GeneratedRegex( @"\.\w+(?:\.t|T)*$" )]
+    [GeneratedRegex( @"\.\w+(?:\.[tT])*$" )]
     private static partial Regex TransformExtension();
 
 
