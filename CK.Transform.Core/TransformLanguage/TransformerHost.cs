@@ -123,10 +123,12 @@ public sealed partial class TransformerHost
                                      ?? FindLanguage( _autoTLanguages, name, withFileExtensions );
                 if( language != null ) return language;
 
+                // The number of ".t" removed from the name: "sql.t" is a level 1.
                 int transformerLevel = 0;
                 var subName = name;
                 while( RemoveTransformerExtension( ref subName ) )
                 {
+                    ++transformerLevel;
                     // Don't lookup in the _autoTLanguages here: we don't (currently) want to
                     // create useless instances of AutoTransformLanguage with a target
                     // analyzer that is a standard LangageTransformAnalyzer.
@@ -140,9 +142,8 @@ public sealed partial class TransformerHost
                     {
                         break;
                     }
-                    ++transformerLevel;
                 }
-                if( language == null || transformerLevel == 0 )
+                if( language == null )
                 {
                     // No luck: this is not a ".t" name or we cannot find a target language.
                     return null;
