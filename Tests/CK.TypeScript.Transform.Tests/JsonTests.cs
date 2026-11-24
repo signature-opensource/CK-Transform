@@ -150,6 +150,10 @@ public class JsonTests
     [TestCase( "{ \"a\": undefined }" )]
     [TestCase( "[ 1, 2 " )]
     [TestCase( "{ \"a\": 1 } 2" )]
+    [TestCase( "{ \"a\": 1, " )]
+    [TestCase( "{ \"a\": 1" )]
+    [TestCase( "{" )]
+    [TestCase( "{ \"a\": " )]
     public void parse_errors( string text )
     {
         new JsonAnalyzer().Parse( text.AsMemory() ).Success.ShouldBeFalse();
