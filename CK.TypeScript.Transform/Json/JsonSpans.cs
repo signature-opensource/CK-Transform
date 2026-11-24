@@ -6,11 +6,11 @@ using System.Linq;
 namespace CK.TypeScript.Transform;
 
 /// <summary>
-/// A JSON object: from its opening <c>{</c> to its closing <c>}</c>. Its children are its <see cref="JsonProperty"/>.
+/// A JSON object: from its opening <c>{</c> to its closing <c>}</c>. Its children are its <see cref="JsonPropertySpan"/>.
 /// </summary>
-public sealed class JsonObject : SourceSpan
+public sealed class JsonObjectSpan : SourceSpan
 {
-    internal JsonObject( int beg, int end )
+    internal JsonObjectSpan( int beg, int end )
         : base( beg, end )
     {
     }
@@ -18,7 +18,7 @@ public sealed class JsonObject : SourceSpan
     /// <summary>
     /// Gets the properties of this object.
     /// </summary>
-    public IEnumerable<JsonProperty> Properties => Children.OfType<JsonProperty>();
+    public IEnumerable<JsonPropertySpan> Properties => Children.OfType<JsonPropertySpan>();
 
     /// <summary>
     /// Finds a property by its name.
@@ -29,7 +29,7 @@ public sealed class JsonObject : SourceSpan
     /// (use <see cref="StringComparison.OrdinalIgnoreCase"/> for them).
     /// </param>
     /// <returns>The property or null.</returns>
-    public JsonProperty? FindProperty( string name, StringComparison comparison = StringComparison.Ordinal )
+    public JsonPropertySpan? FindProperty( string name, StringComparison comparison = StringComparison.Ordinal )
     {
         foreach( var p in Properties )
         {
@@ -43,20 +43,20 @@ public sealed class JsonObject : SourceSpan
 /// A JSON array: from its opening <c>[</c> to its closing <c>]</c>. Its children are the spans of its object and
 /// array items (a scalar item has no span).
 /// </summary>
-public sealed class JsonArray : SourceSpan
+public sealed class JsonArraySpan : SourceSpan
 {
-    internal JsonArray( int beg, int end )
+    internal JsonArraySpan( int beg, int end )
         : base( beg, end )
     {
     }
 }
 
 /// <summary>
-/// A property of a <see cref="JsonObject"/>: its name token, the colon and its value (its comma is not part of it).
+/// A property of a <see cref="JsonObjectSpan"/>: its name token, the colon and its value (its comma is not part of it).
 /// </summary>
-public sealed class JsonProperty : SourceSpan
+public sealed class JsonPropertySpan : SourceSpan
 {
-    internal JsonProperty( int beg, int end, string name )
+    internal JsonPropertySpan( int beg, int end, string name )
         : base( beg, end )
     {
         Name = name;
@@ -85,13 +85,13 @@ public sealed class JsonProperty : SourceSpan
     /// <summary>
     /// Gets the object value of this property or null.
     /// </summary>
-    public JsonObject? ObjectValue => FirstChild as JsonObject;
+    public JsonObjectSpan? ObjectValue => FirstChild as JsonObjectSpan;
 
     /// <summary>
     /// Gets the object that contains this property.
     /// </summary>
-    public JsonObject? Owner => Parent as JsonObject;
+    public JsonObjectSpan? Owner => Parent as JsonObjectSpan;
 
     /// <inheritdoc/>
-    public override string ToString() => $"JsonProperty '{Name}' {Span}";
+    public override string ToString() => $"JsonPropertySpan '{Name}' {Span}";
 }

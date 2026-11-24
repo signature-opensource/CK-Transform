@@ -289,7 +289,7 @@ public static class JsonCodeEditorExtensions
         return true;
     }
 
-    static JsonProperty? FindProperty( SourceCodeEditor editor, IReadOnlyList<string> path, StringComparison comparison )
+    static JsonPropertySpan? FindProperty( SourceCodeEditor editor, IReadOnlyList<string> path, StringComparison comparison )
     {
         Throw.CheckArgument( path.Count > 0 );
         var p = editor.Code.FindJsonProperty( path, comparison );
@@ -362,7 +362,7 @@ public static class JsonCodeEditorExtensions
             int iNL = text.IndexOf( '\n' );
             NewLine = iNL > 0 && text[iNL - 1] == '\r' ? "\r\n" : iNL >= 0 ? "\n" : Environment.NewLine;
             IndentUnit = "  ";
-            foreach( var o in code.Spans.AllSpans.OfType<JsonObject>() )
+            foreach( var o in code.Spans.AllSpans.OfType<JsonObjectSpan>() )
             {
                 var first = o.Properties.FirstOrDefault();
                 if( first != null && IsLineStart( first.NameIndex ) )

@@ -16,9 +16,9 @@ error); the literals are `true`, `false` and `null`. Its spans ([JsonSpans.cs](J
 
 | Span | Covers | Members |
 |------|--------|---------|
-| `JsonObject` | From `{` to `}`. Its children are its properties. | `Properties`, `FindProperty( name, comparison )` |
-| `JsonArray` | From `[` to `]`. Its children are the spans of its object and array items. | |
-| `JsonProperty` | The name token, the colon and the value (not the comma). | `Name` (unescaped), `NameIndex`, `ValueSpan`, `Value`, `ObjectValue`, `Owner` |
+| `JsonObjectSpan` | From `{` to `}`. Its children are its properties. | `Properties`, `FindProperty( name, comparison )` |
+| `JsonArraySpan` | From `[` to `]`. Its children are the spans of its object and array items. | |
+| `JsonPropertySpan` | The name token, the colon and the value (not the comma). | `Name` (unescaped), `NameIndex`, `ValueSpan`, `Value`, `ObjectValue`, `Owner` |
 
 Its span specifications are `{braces}` (or `{{}}`), `{brackets}` (or `{[]}`), `{object}`, `{array}` and `{property}`.
 

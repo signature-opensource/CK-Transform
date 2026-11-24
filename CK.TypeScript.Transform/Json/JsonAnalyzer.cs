@@ -9,8 +9,8 @@ namespace CK.TypeScript.Transform;
 /// JSON analyzer that accepts comments and trailing commas (JSONC).
 /// <para>
 /// JSON is a subset of JavaScript: the tokens are the ones of the <see cref="TypeScriptAnalyzer"/>. The source text is kept
-/// exactly (the comments and the layout are trivias of the tokens). The spans are the <see cref="JsonObject"/>,
-/// <see cref="JsonArray"/> and <see cref="JsonProperty"/>. The <see cref="JsonCodeEditorExtensions"/> edit them.
+/// exactly (the comments and the layout are trivias of the tokens). The spans are the <see cref="JsonObjectSpan"/>,
+/// <see cref="JsonArraySpan"/> and <see cref="JsonPropertySpan"/>. The <see cref="JsonCodeEditorExtensions"/> edit them.
 /// </para>
 /// </summary>
 public sealed class JsonAnalyzer : TargetLanguageAnalyzer
@@ -110,7 +110,7 @@ public sealed class JsonAnalyzer : TargetLanguageAnalyzer
             var name = UnescapeString( head.LastToken!.Text.Span );
             if( head.MatchToken( TokenType.Colon, "':'" ) is TokenError ) return false;
             if( !ParseValue( ref head ) ) return false;
-            head.AddSpan( new JsonProperty( propBeg, head.LastTokenIndex + 1, name ) );
+            head.AddSpan( new JsonPropertySpan( propBeg, head.LastTokenIndex + 1, name ) );
             if( head.LowLevelTokenType is TokenType.Comma )
             {
                 // A trailing comma is accepted (JSONC).
@@ -124,7 +124,7 @@ public sealed class JsonAnalyzer : TargetLanguageAnalyzer
             }
         }
         head.AcceptLowLevelToken();
-        head.AddSpan( new JsonObject( beg, head.LastTokenIndex + 1 ) );
+        head.AddSpan( new JsonObjectSpan( beg, head.LastTokenIndex + 1 ) );
         return true;
     }
 
@@ -149,7 +149,7 @@ public sealed class JsonAnalyzer : TargetLanguageAnalyzer
             }
         }
         head.AcceptLowLevelToken();
-        head.AddSpan( new JsonArray( beg, head.LastTokenIndex + 1 ) );
+        head.AddSpan( new JsonArraySpan( beg, head.LastTokenIndex + 1 ) );
         return true;
     }
 
@@ -183,9 +183,9 @@ public sealed class JsonAnalyzer : TargetLanguageAnalyzer
                                     TokenType.CloseBracket => EnclosingTokenType.Close,
                                     _ => EnclosingTokenType.None
                                 } ),
-            "object" => new SpanTypeOperator( "{object}", typeof( JsonObject ) ),
-            "array" => new SpanTypeOperator( "{array}", typeof( JsonArray ) ),
-            "property" => new SpanTypeOperator( "{property}", typeof( JsonProperty ) ),
+            "object" => new SpanTypeOperator( "{object}", typeof( JsonObjectSpan ) ),
+            "array" => new SpanTypeOperator( "{array}", typeof( JsonArraySpan ) ),
+            "property" => new SpanTypeOperator( "{property}", typeof( JsonPropertySpan ) ),
             _ => $$"""
                    Invalid span type '{spanSpec}'.
                    Allowed are "braces", "{}", "brackets", "[]", "object", "array", "property".

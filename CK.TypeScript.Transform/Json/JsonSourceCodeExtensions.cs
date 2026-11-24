@@ -31,7 +31,7 @@ public static class JsonSourceCodeExtensions
     /// </summary>
     /// <param name="code">This source code.</param>
     /// <returns>The root object or null.</returns>
-    public static JsonObject? GetJsonRootObject( this SourceCode code ) => code.Spans.FirstOrDefault() as JsonObject;
+    public static JsonObjectSpan? GetJsonRootObject( this SourceCode code ) => code.Spans.FirstOrDefault() as JsonObjectSpan;
 
     /// <summary>
     /// Finds an object by its path.
@@ -40,7 +40,7 @@ public static class JsonSourceCodeExtensions
     /// <param name="path">The property names.</param>
     /// <param name="comparison">The name comparison.</param>
     /// <returns>The object or null.</returns>
-    public static JsonObject? FindJsonObject( this SourceCode code,
+    public static JsonObjectSpan? FindJsonObject( this SourceCode code,
                                               IReadOnlyList<string> path,
                                               StringComparison comparison = StringComparison.Ordinal )
     {
@@ -49,7 +49,7 @@ public static class JsonSourceCodeExtensions
     }
 
     /// <inheritdoc cref="FindJsonObject(SourceCode, IReadOnlyList{string}, StringComparison)"/>
-    public static JsonObject? FindJsonObject( this SourceCode code,
+    public static JsonObjectSpan? FindJsonObject( this SourceCode code,
                                               string path,
                                               StringComparison comparison = StringComparison.Ordinal )
         => FindJsonObject( code, SplitJsonPath( path ), comparison );
@@ -61,13 +61,13 @@ public static class JsonSourceCodeExtensions
     /// <param name="path">The property names (not empty).</param>
     /// <param name="comparison">The name comparison.</param>
     /// <returns>The property or null.</returns>
-    public static JsonProperty? FindJsonProperty( this SourceCode code,
+    public static JsonPropertySpan? FindJsonProperty( this SourceCode code,
                                                   IReadOnlyList<string> path,
                                                   StringComparison comparison = StringComparison.Ordinal )
     {
         Throw.CheckArgument( path.Count > 0 );
         var o = code.GetJsonRootObject();
-        JsonProperty? p = null;
+        JsonPropertySpan? p = null;
         foreach( var name in path )
         {
             if( o == null ) return null;
@@ -79,7 +79,7 @@ public static class JsonSourceCodeExtensions
     }
 
     /// <inheritdoc cref="FindJsonProperty(SourceCode, IReadOnlyList{string}, StringComparison)"/>
-    public static JsonProperty? FindJsonProperty( this SourceCode code,
+    public static JsonPropertySpan? FindJsonProperty( this SourceCode code,
                                                   string path,
                                                   StringComparison comparison = StringComparison.Ordinal )
         => FindJsonProperty( code, SplitJsonPath( path ), comparison );
@@ -90,7 +90,7 @@ public static class JsonSourceCodeExtensions
     /// <param name="code">This source code.</param>
     /// <param name="property">The property.</param>
     /// <returns>The text of the value, without its leading and trailing trivias.</returns>
-    public static string GetJsonValueText( this SourceCode code, JsonProperty property )
+    public static string GetJsonValueText( this SourceCode code, JsonPropertySpan property )
     {
         var v = property.ValueSpan;
         var b = new System.Text.StringBuilder();
