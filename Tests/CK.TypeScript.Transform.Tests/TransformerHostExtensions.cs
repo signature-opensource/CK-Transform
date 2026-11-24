@@ -11,7 +11,8 @@ static class TransformerHostExtensions
     public static void ApplyAndCheck( this TransformerHost host, string source, string transformer, string result )
     {
         Throw.Assert( Environment.NewLine == "\r\n" || Environment.NewLine == "\n" );
-        source.ReplaceLineEndings().ShouldBe( source );
+        // Exact on purpose: ShouldBe( string ) ignores the newline style.
+        source.ReplaceLineEndings().ShouldBe( source, StringComparer.Ordinal );
 
         Run( host, source, transformer, result );
         Run( host, source, RevertLineEndings( transformer ), result );
