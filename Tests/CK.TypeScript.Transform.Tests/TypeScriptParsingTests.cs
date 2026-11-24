@@ -21,6 +21,18 @@ public class TypeScriptParsingTests
         sourceCode.Tokens.ShouldBeEmpty();
     }
 
+    [TestCase( "[0, 1]", "[|0|,|1|]" )]
+    [TestCase( "f(0)", "f|(|0|)" )]
+    [TestCase( "0;", "0|;" )]
+    [TestCase( "x = 0 }", "x|=|0|}" )]
+    [TestCase( "01, 0.5, 0x1F,", "01|,|0.5|,|0x1F|," )]
+    public void a_number_starting_with_0_ends_before_a_non_digit( string text, string tokens )
+    {
+        var a = new TypeScriptAnalyzer();
+        var sourceCode = a.ParseOrThrow( text );
+        string.Join( '|', sourceCode.Tokens.Select( t => t.Text.ToString() ) ).ShouldBe( tokens );
+    }
+
     [Test]
     public void unrecognized_token()
     {

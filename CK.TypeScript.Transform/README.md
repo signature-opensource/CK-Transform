@@ -72,6 +72,12 @@ the new path is under the existing one and imports the same symbol: the name the
 From code, `EnsureImportStatement.EnsureImport` does the same in a `SourceCodeEditor` with an `IImportLine`: an
 [`ImportLine`](Language/ImportLine.cs) is a mutable one.
 
+## JSON
+
+JSON is a subset of JavaScript: this project also holds the JSON language (comments and trailing commas accepted),
+which reuses the TypeScript tokenizer and edits a document by path while keeping its comments and layout: see
+[the JSON language](Json/README.md).
+
 ## Tests
 
 The tests in [CK.TypeScript.Transform.Tests](../Tests/CK.TypeScript.Transform.Tests) parse TypeScript texts

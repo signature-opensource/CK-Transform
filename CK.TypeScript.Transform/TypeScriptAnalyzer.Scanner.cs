@@ -9,7 +9,14 @@ namespace CK.TypeScript.Transform;
 sealed partial class TypeScriptAnalyzer // LowLevelTokenize & Scanner
 {
     /// <inheritdoc/>
-    protected override LowLevelToken LowLevelTokenize( ReadOnlySpan<char> head )
+    protected override LowLevelToken LowLevelTokenize( ReadOnlySpan<char> head ) => Tokenize( head );
+
+    /// <summary>
+    /// The low-level tokenizer of TypeScript, shared with the <see cref="JsonAnalyzer"/> (JSON is a subset of JavaScript).
+    /// </summary>
+    /// <param name="head">The text to tokenize (not empty).</param>
+    /// <returns>The low-level token.</returns>
+    internal static LowLevelToken Tokenize( ReadOnlySpan<char> head )
     {
         Throw.DebugAssert( head.Length > 0 );
         // Since numbers can start with a dot, let's start with numbers.
@@ -101,6 +108,8 @@ sealed partial class TypeScriptAnalyzer // LowLevelTokenize & Scanner
                     if( iS < head.Length && head[iS] == 'n' ) ++iS;
                     return new LowLevelToken( TokenType.GenericNumber, iS );
                 }
+                // EatDigits starts after iS: head[1] must be considered ("0," is the number "0" and a comma).
+                iS = 0;
                 EatDigits( ref iS, head, _decimal );
             }
             else if( c == '.' )

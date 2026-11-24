@@ -620,7 +620,7 @@ public ref struct TokenizerHead
     /// <param name="missingDescription">Describes what is missing, for example "target (string or identifier)".</param>
     /// <param name="errorType">Specific missing error type if required.</param>
     /// <returns>The inlined error.</returns>
-    public TokenError AppendMissingToken( string missingDescription, TokenType errorType = TokenType.GenericMissingToken )
+    public TokenError AppendMissingToken( string missingDescription, TokenType errorType = TokenType.GenericMissingToken|TokenType.ErrorClassBit )
     {
         return AppendError( $"Missing '{missingDescription}'.", 0, errorType );
     }
